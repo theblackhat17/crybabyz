@@ -1,0 +1,16 @@
+{% extends 'main_app/base.html' %}
+{% block content %}
+<h2>Gestion des Coupons</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Créer un Coupon</button>
+</form>
+
+<h3>Liste des Coupons</h3>
+<ul>
+    {% for coupon in coupons %}
+        <li>{{ coupon.code }} - {{ coupon.discount_percent }}% - Expire le {{ coupon.valid_until }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="container my-5">
+    <!-- Message de bienvenue -->
+    <h1 class="text-center" id="welcome-message" style="font-size: 2.5rem; color: rgb(255, 0, 170); font-family: 'GlowingZone', sans-serif;">
+        Bienvenue {% if user.is_authenticated %} <b>{{ user.username }}</b> {% endif %} sur CryBaby
+    </h1>
+
+    <!-- Sections -->
+    <div class="sections mt-5">
+        <!-- Section 1: Le concept -->
+        <section id="concept" class="py-5">
+            <h2 class="text-center mb-4">LE CONCEPT</h2>
+            <p class="text-center">
+                Ici, vous pouvez écrire un texte descriptif sur le concept de BabyCry. Utilisez cette section pour expliquer les objectifs et les caractéristiques principales de votre site.
+            </p>
+        </section>
+
+        <!-- Section 2: Pluralisme Musical -->
+        <section id="pluralisme-musical" class="py-5 bg-light">
+            <h2 class="text-center mb-4">DIVERSITÉ MUSICALE</h2>
+            <p class="text-center">
+                Décrivez ici l'aspect pluraliste de BabyCry, la diversité musicale que vous proposez et comment cela enrichit l'expérience des utilisateurs.
+            </p>
+        </section>
+
+        <!-- Section 3: Notre équipe -->
+        <section id="notre-equipe" class="py-5">
+            <h2 class="text-center mb-4">NOTRE ÉQUIPE</h2>
+            <p class="text-center">
+                Présentez votre équipe ici. Parlez de l'expertise, des passions et de l'engagement de ceux qui travaillent sur BabyCry.
+            </p>
+        </section>
+
+        <section id="nos-conseils" class="py-5 bg-light">
+            <h2 class="text-center mb-4">NOS CONSEILS</h2>
+            <h3><b>RENOMMER</b> les fichiers</h3>
+            <p>Renommer bien chacun des fichiers que vous avez séléctionné au fur et à mesure des semaines pour ne pas vous retrouver avec une énorme quantité de travail</p>
+            <h3><b>AJOUTER</b> toujours un genre à vous</h3>
+            <p>Meme si vous l'inventez tant que ça vous parle, mettre un genre c'est l'étape la plus importante de l'organisation. Toujours avec les mêmes orthographes. N'hesitez pas à créer des sous genre pour vous y retrouvez plus facilement. Un bon dossier continent MAX 150 tracks du même genre</p>
+            <h3><b>VÉRIFIER</b> les BPM</h3>
+            <p>BPM, BeatGrid peuvent être faux. Ne faites pas totalement confiance à la technologie !</p>
+            <h3><b>INTÉGRER</b> les tracks dans vos sets</h3>
+            <P>Quand vous séléctionnez un track, imaginez avec quoi il pourrait aller dans ce que vous faites deja et essayer l'enchainement le plus vite possible en live. 
+            c'est le meilleur moyen de rentrer des nouveautés rapidement et reguliérement</P>
+        </section>
+    </div>
+</main>
+{% endblock %}
+
+<!-- Include JavaScript for smooth scrolling -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add smooth scrolling to all links
+        document.querySelectorAll('a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                if (this.hash !== "") {
+                    e.preventDefault();
+                    const hash = this.hash;
+                    document.querySelector(hash).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });
+</script>

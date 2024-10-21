@@ -1,0 +1,36 @@
+{% extends 'main_app/base.html' %}
+
+{% block content %}
+<h2 class="text-center mb-5">Gestion des Packs</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <h3>Liste des packs</h3>
+        <ul class="list-group">
+            {% for pack in packs %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ pack.name }}
+                <a href="{% url 'manage_packs' %}?edit_pack_id={{ pack.id }}" class="btn btn-sm btn-secondary">Modifier</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="col-md-4">
+        {% if pack_to_edit %}
+            <h3>Modifier le pack : {{ pack_to_edit.name }}</h3>
+        {% else %}
+            <h3>Ajouter un nouveau pack</h3>
+        {% endif %}
+        <!-- Formulaire d'ajout ou de modification -->
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn {% if pack_to_edit %}btn-primary{% else %}btn-success{% endif %}">
+                {% if pack_to_edit %}Enregistrer les modifications{% else %}Ajouter le pack{% endif %}
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

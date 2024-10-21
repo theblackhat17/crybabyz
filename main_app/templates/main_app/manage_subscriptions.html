@@ -1,0 +1,141 @@
+{% extends 'main_app/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center mb-5">Gestion des Abonnements</h2>
+
+    <!-- Liste des abonnés actifs -->
+    <div class="mb-5">
+        <h3>Abonnés Actifs</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nom d'utilisateur</th>
+                    <th>Email</th>
+                    <th>Date d'expiration de l'abonnement</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in active_subscribers %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.subscription_end_date }}</td>
+                    <td>
+                        <!-- Formulaire pour envoyer un coupon -->
+                        <form action="{% url 'send_coupon' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="user_id" value="{{ user.id }}">
+                            <button type="submit" class="btn btn-info btn-sm">Envoyer un coupon</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">Aucun abonné actif</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Liste des utilisateurs (y compris ceux qui ne sont pas abonnés) -->
+    <div class="mb-5">
+        <h3>Tous les Utilisateurs</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nom d'utilisateur</th>
+                    <th>Email</th>
+                    <th>Statut d'abonnement</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in all_users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        {% if user.is_subscribed %}
+                            <span class="badge bg-success">Abonné</span>
+                        {% else %}
+                            <span class="badge bg-danger">Non Abonné</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <!-- Formulaire pour envoyer un coupon -->
+                        <form action="{% url 'send_coupon' %}" method="post" class="d-flex">
+                            {% csrf_token %}
+                            <input type="hidden" name="user_id" value="{{ user.id }}">
+                            <button type="submit" class="btn btn-info btn-sm">Envoyer un coupon</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">Aucun utilisateur trouvé</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Liste des abonnés dont l'abonnement expire bientôt -->
+    <div class="mb-5">
+        <h3>Abonnements Expirant Bientôt</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nom d'utilisateur</th>
+                    <th>Email</th>
+                    <th>Date d'expiration de l'abonnement</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in expiring_soon %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.subscription_end_date }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center">Aucun abonnement expirant bientôt</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Historique des paiements -->
+    <div class="mb-5">
+        <h3>Historique des Paiements</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nom d'utilisateur</th>
+                    <th>Email</th>
+                    <th>Date du Paiement</th>
+                    <th>Montant</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment in payment_history %}
+                <tr>
+                    <td>{{ payment.user.username }}</td>
+                    <td>{{ payment.user.email }}</td>
+                    <td>{{ payment.date }}</td>
+                    <td>{{ payment.amount }} €</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">Aucun historique de paiement</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

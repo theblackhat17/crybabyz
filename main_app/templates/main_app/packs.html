@@ -1,0 +1,39 @@
+{% extends 'main_app/base.html' %}
+
+{% block content %}
+<h2 class="text-center mb-5">Liste des packs</h2>
+
+<div class="row">
+    {% for pack in packs %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            <img src="{{ pack.image.url }}" class="card-img-top" alt="{{ pack.name }}" style="height: 200px; object-fit: cover;">
+            <div class="card-body d-flex flex-column">
+                <h3 class="card-title">{{ pack.name }}</h3>
+                <p class="card-text">{{ pack.description }}</p>
+
+                <div class="mt-auto">
+                    {% if not is_authenticated %}
+                        <!-- Si l'utilisateur n'est pas connecté, afficher le bouton de connexion -->
+                        <a href="{% url 'login' %}" class="btn btn-primary btn-block">Se connecter pour télécharger</a>
+                    {% elif not is_subscribed %}
+                        <!-- Si l'utilisateur est connecté mais pas abonné, afficher le bouton d'abonnement -->
+                        <a href="{% url 'subscribe' %}" class="btn btn-warning btn-block">S'abonner pour télécharger - 10,00 €</a>
+                    {% else %}
+                        <!-- Si l'utilisateur est abonné, afficher le lien de téléchargement -->
+                        <a href="{{ pack.download_url }}" class="btn btn-success btn-block" download>Télécharger le pack</a>
+                    {% endif %}
+                
+                    {% if is_admin %}
+                        <!-- Si l'utilisateur est un administrateur, rediriger vers la page manage_packs pour la modification -->
+                        <a href="{% url manage_pack_url %}?edit_pack_id={{ pack.id }}" class="btn btn-secondary btn-block mt-2">Modifier</a>
+                    {% endif %}
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

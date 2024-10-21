@@ -1,0 +1,18 @@
+DATE : 17 SEP
+
+Je suis en train de voir pour gérer l'erreur du passage de false à true à is_subscribed quand l'uitlisateur a payé. ✅
+
+---------
+
+Faire en sorte que le coupon s'applique sur l'abboenment d'un utilisateur pas encore abboné
+
+
+_______
+
+
+Ca marche mais en gros c'est abbone toi, rammène du monde et sur le prochain mois tu auras la réduc
+
+
+
+
+j'aimerai désormais mettre en ligne mon site pour que des utilisateurs puissent s'inscrire au grand jour. 

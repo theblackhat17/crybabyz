@@ -1,0 +1,15 @@
+
+{% extends 'main_app/base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2>Modifier le Pack</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+            <a href="{% url 'manage_packs' %}" class="btn btn-secondary">Annuler</a>
+        </form>
+    </div>
+{% endblock %}

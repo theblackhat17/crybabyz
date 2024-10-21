@@ -1,0 +1,22 @@
+{% extends 'main_app/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Envoyer un coupon</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Envoyer le coupon</button>
+    </form>
+</div>
+{% endblock %}
+
+<script>
+    $(document).ready(function() {
+        $('#id_valid_from, #id_valid_until').datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true
+        });
+    });
+</script>

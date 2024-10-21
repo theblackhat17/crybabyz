@@ -1,0 +1,92 @@
+{% extends 'main_app/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Profil utilisateur -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                {% if user.avatar %}
+                    <img src="{{ user.avatar.url }}" class="card-img-top rounded-circle mx-auto mt-3" alt="Avatar" style="width: 150px; height: 150px; object-fit: cover;">
+                {% else %}
+                    <img src="https://via.placeholder.com/150" class="card-img-top rounded-circle mx-auto mt-3" alt="Avatar">
+                {% endif %}
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
+                    <p class="card-text">{{ user.email }}</p>
+                    <a href="{% url 'edit_profile' %}" class="btn btn-primary">Modifier le profil</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Détails de l'utilisateur -->
+        <div class="col-md-8">
+            <h2 class="mb-4">Mon profil</h2>
+            <ul class="list-group mb-3">
+                <li class="list-group-item"><strong>Prénom:</strong> {{ user.first_name }}</li>
+                <li class="list-group-item"><strong>Nom:</strong> {{ user.last_name }}</li>
+                <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
+                <li class="list-group-item"><strong>Téléphone:</strong> {{ user.phone }}</li>
+                <li class="list-group-item"><strong>Adresse:</strong> {{ user.street }}, {{ user.city }}, {{ user.country }}</li>
+                <li class="list-group-item">
+                    <strong>Statut d'abonnement:</strong>
+                    {% if user.is_subscribed %}
+                        <span class="badge bg-success">Abonné</span>
+                        {% if user.subscription_end_date %}
+                            <p class="mt-2">Votre abonnement prendra fin le {{ user.subscription_end_date|date:"d/m/Y H:i" }}</p>
+                        {% endif %}
+                    {% else %}
+                        <span class="badge bg-danger">Non Abonné</span>
+                    {% endif %}
+                </li>
+            </ul>
+            
+            {% if user.is_subscribed %}
+                <form action="{% url 'cancel_subscription' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Annuler l'abonnement</button>
+                </form>
+            {% endif %}
+
+            <!-- Section des coupons disponibles -->
+            <h3 class="mt-5">Coupons Disponibles</h3>
+            <div class="list-group">
+                {% for coupon in coupons %}
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">Code: {{ coupon.code }}</h5>
+                            <p class="mb-1">Réduction: {{ coupon.discount_percent }}%</p>
+                            <small>Valide jusqu'au: {{ coupon.valid_until|date:"d/m/Y H:i" }}</small>
+                        </div>
+                        <button class="btn btn-success apply-coupon-btn" data-coupon-code="{{ coupon.code }}">Utiliser ce coupon</button>
+                    </div>
+                {% empty %}
+                    <p>Aucun coupon disponible.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript pour l'application des coupons -->
+<script>
+    document.querySelectorAll('.apply-coupon-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const couponCode = this.getAttribute('data-coupon-code');
+
+            fetch(`/apply-coupon/${couponCode}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            }).then(response => {
+                if (response.ok) {
+                    alert('Coupon appliqué avec succès !');
+                    location.reload();
+                } else {
+                    alert('Une erreur s\'est produite lors de l\'application du coupon.');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
